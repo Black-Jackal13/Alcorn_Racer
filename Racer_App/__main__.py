@@ -1,4 +1,3 @@
-from app import AlcornRacer
+from gui import main
 
-# Run App
-AlcornRacer().run()
+main()

@@ -25,6 +25,7 @@ class AlcornRacer:
             if predicted_finisher in self.actual:
                 # Find the actual position of the predicted finisher
                 actual_position = self.actual.index(predicted_finisher)
+
                 # Calculate points with penalty
                 points += max(point_values[i] - abs(i - actual_position), 0)
 
@@ -37,7 +38,7 @@ class AlcornRacer:
         """
         return sorted(self.scores.items(), key=lambda x: x[1], reverse=True)
 
-    def _get_scores(self) -> None:
+    def get_scores(self) -> list:
         """
         Calculates scores based on prediction accuracy.
         :return: Nothing
@@ -45,7 +46,7 @@ class AlcornRacer:
         for username, predictions in self.predictions.items():
             self.scores[username] = self._calculate_player_score(predictions)
 
-        self._order_by_rank()
+        return self._order_by_rank()
 
     def add_prediction(self) -> None:
         print("\n===== Prediction Entry ====")
@@ -73,7 +74,9 @@ class AlcornRacer:
                 print(f"    {prediction_rank} {prediction}")
                 prediction_rank += 1
 
-    def add_actual(self) -> None:
+        return self.predictions
+
+    def add_actual(self, ) -> None:
         print("\n=========== Actual ==========")
         # Predictions
         first = str(input("First:             "))
@@ -86,13 +89,15 @@ class AlcornRacer:
         show_score = input("Show scores? [y/n] ")
 
         if show_score.lower() == "y":
-            self._get_scores()
+            self.get_scores()
             self.show_rankings()
 
     def show_rankings(self):
         place = 1
         for username, score in self._order_by_rank():
             print(f"\n{place:0>3} {username+': ':<40}{score}")
+
+        return self._order_by_rank()
 
     def run(self):
         while True:
@@ -114,7 +119,7 @@ class AlcornRacer:
                 self.show_predictions()
             elif command == 3:
                 self.add_actual()
-                self._get_scores()
+                self.get_scores()
             elif command == 4:
                 self.show_rankings()
             elif command == 5:
